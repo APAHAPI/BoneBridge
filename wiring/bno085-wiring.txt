@@ -1,0 +1,5 @@
+Stemma QT Wire Color	Function	ESP32-S3 Pin
+Red			3.3V		3V3 (Never use 5V)
+Black			GND		GND
+Blue			SDA		GPIO 8 (Standard default, adjust if your board layout specifies otherwise)
+Yellow			SCL		GPIO 9
