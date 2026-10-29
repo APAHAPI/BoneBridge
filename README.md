@@ -2,46 +2,35 @@
 
 **Drive Blender bones with real IMU hardware.**
 
-BoneBridge is a Blender 4.x add-on that listens to an IMU streaming over USB serial and writes its orientation straight onto the active pose bone. This repo ships the matching ESP32-S3 firmware, so it works end to end: wire an MPU6050 or BNO085 to a board, flash the sketch, pick the port in Blender, tilt the sensor — the bone follows.
-
-No keyframing by hand, no BVH/FBX round-trip, no mocap suit.
+BoneBridge is a Blender 4.x add-on that listens to an IMU streaming over USB serial and writes its orientation straight onto the active pose bone. This repo ships the matching firmware if available, so it works end to end: wire an IMU to a board, flash the sketch, pick the port in Blender, tilt and move the sensor and the bone follows.
 
 ## How it works
 
 ```
- MPU6050 / BNO085 ──I2C──▶ ESP32-S3 firmware ──USB serial 115200──▶ Blender add-on
-                                               "roll,pitch,yaw"
+ IMU ── I2C/SPI ──▶ microcontroller firmware ──▶ USB serial 115200 ──▶ Blender add-on
+                                                   "roll,pitch,yaw"
 ```
 
-1. **Firmware** reads the IMU over I2C, converts the reading to degrees, and prints one line per sample: `roll,pitch,yaw` — three comma-separated floats, no labels. The BNO085 sketch uses the chip's fused *game rotation vector* quaternion; the MPU6050 sketch derives roll and pitch from the accelerometer.
-2. **The add-on** opens the selected port on a background thread and keeps only the latest valid sample, so Blender never blocks on `readline()`. Lines that don't split into three comma-separated values — startup banners, debug logs — are skipped.
+1. **Firmware** reads the IMU over I2C/SPI, converts the reading to degrees, and prints one line per sample: `roll,pitch,yaw` three comma-separated floats, no labels. The BNO085 sketch uses the chip's fused *game rotation vector* quaternion; the MPU6050 sketch derives roll and pitch from the accelerometer.
+2. **The add-on** opens the selected port on a background thread and keeps only the latest valid sample, so Blender never blocks on `readline()`. Lines that don't split into three comma-separated values: startup banners and debug logs are skipped.
 3. **A modal timer** fires every 20 ms, picks up the newest sample, applies the axis remap and sign flips, runs an exponential smoothing pass, then writes the result to the active pose bone's XYZ Euler rotation.
-4. **Bone axes are not sensor axes.** The bone receives `(pitch, roll, yaw)` in radians: sensor roll drives the bone's local Y, pitch drives X. Local bone axes depend on how the armature was built, which is why the panel exposes a source channel and a sign flip per axis — you realign in the panel instead of patching the sketch.
+4. **Bone axes are not sensor axes.** The bone receives `(pitch, roll, yaw)` in radians: sensor roll drives the bone's local Y, pitch drives X. Local bone axes depend on how the armature was built, which is why the panel exposes a source channel and a sign flip per axis, you realign in the panel instead of patching the sketch to avoid losing time.
 
 ### The serial protocol is the extension point
 
-The add-on doesn't know what board is on the other end. Any device that prints `<roll>,<pitch>,<yaw>\n` in degrees at **115200 baud** works — an Arduino Uno, a classic ESP32, a Raspberry Pi Pico. Adding a board means adding a sketch, not touching Python.
+The add-on doesn't know what board is on the other end. Any device that prints `<roll>,<pitch>,<yaw>\n` in degrees at **115200 baud** works: an Arduino Uno, a classic ESP32, a Raspberry Pi Pico. Adding a board means adding a sketch, not touching Python.
 
 ## Supported hardware
 
 | Sensor | Board | Firmware | Status |
 | --- | --- | --- | --- |
 | BNO085 | ESP32-S3 | [`firmware/esp32s3_bno085`](firmware/esp32s3_bno085) | Working |
-| MPU6050 | ESP32-S3 | [`firmware/esp32s3_mpu6050`](firmware/esp32s3_mpu6050) | Working |
+| MPU6050 | ESP32-S3 | [`firmware/esp32s3_mpu6050`](firmware/esp32s3_mpu6050) | Testing |
 | MPU9250 | ESP32-S3 | — | Planned |
 | MPU6050 | Arduino Uno / Nano | — | Planned |
 | BNO085 | ESP32 classic / C3 | — | Planned |
 
-**BNO085 vs MPU6050.** The BNO085 fuses gyro and accelerometer on-chip and returns a stable orientation with a relative yaw. The MPU6050 is raw accelerometer + gyro: the included sketch computes roll and pitch from gravity and leaves yaw at `0`, so it tracks tilt, not heading. Cheap and good for wrists, necks and props — but not a compass.
-
-## Repository layout
-
-```
-addon/bonebridge.py          the Blender add-on (single file)
-firmware/esp32s3_bno085/     Arduino sketch for BNO085
-firmware/esp32s3_mpu6050/    Arduino sketch for MPU6050
-docs/wiring/                 wiring diagrams
-```
+More coming in the future
 
 ## Setup
 
@@ -95,26 +84,6 @@ Arduino IDE 2.x:
 Both sketches stream at 115200 baud, which is what the add-on expects.
 
 ## Wiring
-
-### BNO085 (Stemma QT) → ESP32-S3
-
-| Wire | Function | ESP32-S3 |
-| --- | --- | --- |
-| Red | 3.3 V | **3V3 — never 5 V** |
-| Black | GND | GND |
-| Blue | SDA | GPIO 8 |
-| Yellow | SCL | GPIO 9 |
-
-### MPU6050 (HW-123 / GY-521) → ESP32-S3
-
-| Module pin | ESP32-S3 | Function |
-| --- | --- | --- |
-| VCC | 3.3 V | Power |
-| GND | GND | Ground |
-| SCL | GPIO 9 | I2C clock |
-| SDA | GPIO 8 | I2C data |
-
-Diagrams: [BNO085](docs/wiring/bno085-wiring.png) · [MPU6050](docs/wiring/mpu6050-wiring.png)
 
 Different board layout? Change `SDA_PIN` and `SCL_PIN` at the top of the sketch. Both sensors are usually at I2C address `0x4A` (BNO085) and `0x68` (MPU6050); the `PS0`/`PS1` and `AD0` pins change that.
 
