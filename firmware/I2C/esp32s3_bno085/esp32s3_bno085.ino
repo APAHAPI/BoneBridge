@@ -1,3 +1,18 @@
+/*
+  BNO085 to ESP32-S3 over I2C (Stemma QT cable)
+
+  Stemma QT wire   Function   ESP32-S3 pin
+  Red              3.3V       3V3 (never use 5V)
+  Black            GND        GND
+  Blue             SDA        GPIO 8
+  Yellow           SCL        GPIO 9
+
+  Default I2C address: 0x4A. The PS0 and PS1 pins change it.
+  If your board uses different pins, change SDA_PIN and SCL_PIN below.
+
+  Output: roll,pitch,yaw in degrees at 115200 baud, one line per sample.
+*/
+
 #include <Wire.h>
 #include <Adafruit_BNO08x.h>
 

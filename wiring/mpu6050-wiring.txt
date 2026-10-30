@@ -1,5 +1,0 @@
-MPU-6050 Pin	ESP32-S3 Pin	Function
-VCC		3.3V		Power (3.3V)
-GND		GND		Ground
-SCL		GPIO 9		I2C Clock
-SDA		GPIO 8		I2C Data
