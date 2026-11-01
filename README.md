@@ -67,7 +67,7 @@ If that prints a version number, you are done.
 
 ### 2. Install the add-on
 
-Edit → Preferences → Add-ons → dropdown (top right) → **Install from Disk…** → choose `addon/bonebridge.py` → enable **BoneBridge**.
+Edit → Preferences → Add-ons → dropdown (top right) → **Install from Disk…** → choose `addon/bonebridge.zip` → enable **BoneBridge**.
 
 Blender 4.2+ loads single-file legacy add-ons this way; the add-on does not need to be an Extension.
 
