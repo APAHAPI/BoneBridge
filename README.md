@@ -32,8 +32,8 @@ The add-on does not know what board is on the other end. Any device that prints 
 
 | Sensor | Board | Bus | Firmware | Status |
 | --- | --- | --- | --- | --- |
-| BNO085 | ESP32-S3 | I2C | [`firmware/esp32s3_bno085`](firmware/esp32s3_bno085) | Working |
-| MPU6050 | ESP32-S3 | I2C | [`firmware/esp32s3_mpu6050`](<firmware/esp32s3_mpu6050 (not tested)>) | Untested |
+| BNO085 | ESP32-S3 | I2C | [`firmware/esp32s3_bno085`](firmware/esp32s3_bno085) | Fully Working |
+| MPU6050 | ESP32-S3 | I2C | [`firmware/esp32s3_mpu6050`](<firmware/esp32s3_mpu6050 (not tested)>) | Working only on 2 axis |
 
 These are the sketches included in this repo, not a list of supported hardware. Adding another sensor or board is a firmware change; the Blender side stays the same. ESP32-S3 is used here because the boards are cheap, have native USB, and are well supported by the Arduino core. BNO085 and MPU6050 cover the common first builds: fused orientation and a low-cost accelerometer.
 
@@ -121,9 +121,8 @@ Streaming only sets the live pose; nothing is keyed. Turn on **Auto Key** and pl
 - [x] ESP32-S3 + BNO085
 - [x] ESP32-S3 + MPU6050
 - [x] Axis remapping with per-axis sign flips
-- [ ] SPI support alongside I2C, starting with the BNO085
-- [ ] Arduino Uno / Nano firmware (MPU6050 over I2C)
-- [ ] ESP32 classic, C3 and S2 builds
+- [ ] SPI support
+- [ ] Arduino Uno
 - [ ] MPU9250 with magnetometer-based yaw
 - [ ] Quaternion transport (no gimbal lock)
 - [ ] Multiple boards / multiple bones at once
