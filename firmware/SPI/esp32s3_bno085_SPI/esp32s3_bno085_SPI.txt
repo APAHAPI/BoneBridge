@@ -1,3 +1,25 @@
+/*
+  BNO085 to ESP32-S3 over SPI (normal wiring)
+
+Function   ESP32-S3 pin
+3.3V/VIN   3V3 (never use 5V)
+GND        GND
+SDA        GPIO 13
+SCL        GPIO 12
+DI	   GPIO 11
+CS	   GPIO 10
+INT	   GPIO 9
+RST	   GPIO 8
+P0	   3.3V/VIN
+P1	   3.3V/VIN
+
+
+  The PS0 and PS1 pins must be HIGH to trigger SPI protocol.
+  If your board uses different pins, change SDA_PIN and SCL_PIN below.
+
+  Output: roll,pitch,yaw in degrees at 115200 baud, one line per sample.
+*/
+
 #include <Adafruit_BNO08x.h>
 #include <SPI.h>
 
