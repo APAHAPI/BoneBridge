@@ -27,13 +27,8 @@ The serial line is the contract: `roll,pitch,yaw` in degrees at **115200 baud**,
 
 | Sensor | Board | Bus | Firmware | Sends |
 | --- | --- | --- | --- | --- |
-<<<<<<< HEAD
 | BNO085 | ESP32-S3 | I2C | [`firmware/I2C/esp32s3_bno085_I2C`](firmware/I2C/esp32s3_bno085_I2C) | `roll,pitch,yaw` |
 | BNO085 | ESP32-S3 | SPI | [`firmware/SPI/esp32s3_bno085_SPI`](firmware/SPI/esp32s3_bno085_SPI) | `roll,pitch,yaw` |
-=======
-| BNO085 | ESP32-S3 | I2C | [`firmware/esp32s3_bno085`](firmware/esp32s3_bno085) | Fully Working |
-| MPU6050 | ESP32-S3 | I2C | [`firmware/esp32s3_mpu6050`](<firmware/esp32s3_mpu6050 (not tested)>) | Working only on 2 axis |
->>>>>>> 1c419d6c4bbeefeebad3174735a0fb5e7a01333d
 
 Both print a startup banner that the add-on skips.
 
@@ -67,11 +62,7 @@ If that prints a version number, you are done.
 
 ### 2. Install the add-on
 
-<<<<<<< HEAD
 Edit → Preferences → Add-ons → dropdown (top right) → **Install from Disk…** → choose `addon/bone_bridge.zip` → enable **BoneBridge**.
-=======
-Edit → Preferences → Add-ons → dropdown (top right) → **Install from Disk…** → choose `addon/bonebridge.zip` → enable **BoneBridge**.
->>>>>>> 1c419d6c4bbeefeebad3174735a0fb5e7a01333d
 
 The zip is a Blender 4.2+ extension. The readable source lives in `addon/bone_bridge/` if you want to read or change it.
 
@@ -162,14 +153,8 @@ Whatever the agent writes, check it in the Serial Monitor at 115200 first: you s
 - [x] BNO085 on ESP32-S3 over SPI
 - [x] Automatic port detection
 - [x] Axis remapping with per-axis sign flips
-<<<<<<< HEAD
 - [x] Smoothing exposed in the panel
 - [x] Start Behavior: IMU initial pose or direct data
-=======
-- [ ] SPI support
-- [ ] Arduino Uno
-- [ ] MPU9250 with magnetometer-based yaw
->>>>>>> 1c419d6c4bbeefeebad3174735a0fb5e7a01333d
 - [ ] Quaternion transport (no gimbal lock)
 - [ ] Multiple boards / multiple bones at once
 - [ ] Bake the live stream to keyframes
