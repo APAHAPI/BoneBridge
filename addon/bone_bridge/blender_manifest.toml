@@ -1,0 +1,12 @@
+schema_version = "1.0.0"
+id = "bone_bridge"
+name = "BoneBridge"
+version = "1.0.0"
+tagline = "Drives active pose bones with IMU data streamed over serial"
+maintainer = "BoneBridge contributors <your@email.com>"
+type = "add-on"
+website = "https://github.com/yourusername/bonebridge"
+tags = ["Animation", "Rigging"]
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+requirements = ["pyserial"]
